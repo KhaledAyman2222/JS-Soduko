@@ -7,6 +7,7 @@ function Parse() {
 
     for (var i = 0; i < cookie.length; i++) {
         var tmp = cookie[i].indexOf('=');
+        // this uses asscotive array, enters the word 'name' as an index.
         cookie_pairs[cookie[i].slice(0, tmp).trim()] = cookie[i].slice(tmp + 1, cookie[i].length).trim();
     }
 }
