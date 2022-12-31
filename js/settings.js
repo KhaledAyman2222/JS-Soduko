@@ -1,4 +1,7 @@
 $(function(){
+
+    // this file is only for the UI and creating the cookies
+    // the real logic is in the game.js where we extract the data from the cookies. 
     var settings = [
         'Timer',
         'Mistake Limit',
@@ -9,8 +12,11 @@ $(function(){
         'Highlight Identical',
     ]
 
+// this creates the default styling for each button
     $('.setting_btn').each(function (i,obj){
         var val = getCookie(settings[i])
+
+        // null is the default value --- so when cookies are not created the default is going to be "ON"
         if(val === 'on' || val === null){
             $(this).text('ON');
             $(this).css('background-color','rgb(32, 123, 255)');
@@ -23,12 +29,13 @@ $(function(){
         }
     });
 
-
+// this part updates the settings and cookies based on the selection
     $('.setting_btn').on('click', function() {
         var caller = $(this);
         var d = new Date();
         d.setDate(d.getDate() + 7);
 
+        // here we create cookies based on what's written between the html tag as text
         if(caller.text() === 'ON'){
             caller.text('OFF');
             caller.css('background-color','rgb(252, 78, 78)');
