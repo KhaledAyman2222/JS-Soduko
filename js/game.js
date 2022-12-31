@@ -1,4 +1,4 @@
-(function () {
+
     var EMPTY = 'rgb(227, 227, 227)', NORMAL = 'rgb(32, 123, 255)', ERROR = 'rgb(252, 78, 78)',
         DISABLED = 'rgb(110, 110, 110)', ENABLED_NUMBER = 'rgb(255, 164, 32)', SELECTED_NUMBER = 'rgb(182, 226, 161)',
         ENABLED_HELPER = 'rgb(135, 18, 91)', SELECTED_HELPER = 'rgb(120, 175, 255)',
@@ -384,7 +384,7 @@
     }
 
     function SetHelpersOnClick() {
-        $("undo").click(function () { Undo(); });
+        $("#undo").click(function () { Undo(); });
 
         $("#hint").click(function () {
             if (hintCount > 0) {
@@ -436,4 +436,3 @@
             //some logic
         }
     }
-}())
