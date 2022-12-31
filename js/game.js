@@ -20,6 +20,8 @@ var EMPTY = 'rgb(227, 227, 227)', NORMAL = 'rgb(32, 123, 255)', ERROR = 'rgb(252
         'Highlight Identical': true,
     }, time = 0;
 
+
+// this basically runs everything , why was it separated from body.onload = ?  
 BodyLoad();
 
 function SetIds() {
@@ -66,6 +68,7 @@ function BuildBoard(diff) {
 
 function BodyLoad() {
     var url = new URL(window.location.href);
+    // the diffuctly was sent using the url -- not the cookies
     var diff = url.searchParams.get("diff");
 
     SetIds();
@@ -146,6 +149,8 @@ function ResetHighlight() {
 
 function Highlight(r, c) {
     var n = board_unsolved[r][c];
+
+
     ResetHighlight();
     if (settings['Highlight Area']) {
         HighlightBox(r, c);
@@ -329,6 +334,7 @@ function Write(r, c) {
             CheckLose();
         }
 
+        // if we don't have any empty spots in the board, we check if we won or not. 
         if (empty.length === 0) CheckWin();
     }
 
@@ -472,11 +478,16 @@ function CheckLose() {
     }
 }
 
+// here we retrieve the data we store in the cookies using the settings.js
 function RetrieveSettings() {
+    // allcookieList() retrieves an array that contains all the created cookies.
+    // you can access the value of any of them using ascotive array. 
     var tmp = allCookieList();
     for (var settingsKey in settings) {
         var crnt = tmp[settingsKey];
-
+        // this loop will run throw the settings object
+        // and assign true or false to each setting based on the retrived info from the cookie. 
+        // it gets called everytime you refresh the page. 
         if (crnt === undefined || crnt === 'on')
             settings[settingsKey] = true;
         else if (crnt === 'off')
@@ -485,6 +496,8 @@ function RetrieveSettings() {
 }
 
 function StartTimer() {
+    // if the timer settings came with 'true'
+    // we start excuting the function. 
     if (settings['Timer']) {
         timerInterval = setInterval(function () {
             time += 1;
@@ -495,20 +508,31 @@ function StartTimer() {
             if (seconds.length === 1) seconds = `0${seconds}`;
             if (minutes.length === 1) minutes = `0${minutes}`;
 
+            // this will print it out in it's div
             $('#playTime').text(`${minutes}:${seconds}`);
 
         }, 1000);
     } else {
+        // if the timer is 'false' 
+        // we hide it's visibility. 
         $('#timerDiv').css('visibility', 'hidden');
     }
 }
 
 function SetPLayPauseClick() {
+
+    /* the time must be 'true' for the playback settings to be needed. */
     if (settings['Timer']) {
         $('#pause_btn').on('click', function () {
             if (isOn) {
                 clearInterval(timerInterval);
-
+                /* Important !!! 
+                        this goes to the id = board, which is the table holding the board
+                        then to the buttons that are inside of it and disabling them  or enabling them 
+                    based on what is pressed.
+                    this will make the board buttons un clickable, which will hold the who game as alot of functions 
+                    depend on the cells being clicked ! 
+                */    
                 $('#board button').each(function (i, obj) {
                     obj.disabled = true;
                 });
@@ -534,6 +558,7 @@ function SetPLayPauseClick() {
 }
 
 function SetHintAndMistakes(diff) {
+    /* this sets the hint and mistake variables based on difficulity. */
     if (diff === 'e') {
         hintCount = 5;
         mistakeCount = 10;
@@ -545,11 +570,35 @@ function SetHintAndMistakes(diff) {
         mistakeCount = 5;
     }
 
+    /* if mistake limit is true, then we print out the count on the screen 
+        this is only the intialization, we have "Mistake made" variable 
+        which gets updated and inserted in the write() function. 
+    */
     if (settings['Mistake Limit'])
         $('#mistakes').text(`Mistakes: 0/${mistakeCount}`);
 }
 
 function SetEmptyAndInsertable() {
+
+    /* this function intilize both insertable and empy ( both are 1-D arrays) 
+        we push all the locations that contains 0 from the unsolved board,
+        into empty and insertable.
+        so we if use a cell ---- we insert it in insertable 
+        and remove it from the empty array
+
+        the arrays store a string elements which hold the row and column of the cell
+        which can be accessed later easily using indexof()
+        if the element exists ===> indexof() will return it's index in the 1-D array. 
+        if it's not there ===> indexOf() will return -1 
+
+        --- We also se the intial value for each element in the numberUsageArr
+        
+        if the element in the board_unsolved has a value 
+        then we increase it's counter in the array by 1 
+
+        so basically this function does 3 things at the same time,
+        pretty smart move I would say 😁
+        */
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             let tmp = board_unsolved[i][j];
@@ -557,7 +606,9 @@ function SetEmptyAndInsertable() {
             if (tmp === 0) {
                 insertable.push(`${i}${j}`);
                 empty.push(`${i}${j}`);
-            } else numberUsageArr[tmp - 1]++;
+            } 
+            else 
+            numberUsageArr[tmp - 1]++;
         }
     }
 }
