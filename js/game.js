@@ -160,10 +160,14 @@
         document.getElementById(`c${r}${c}`).style.backgroundColor = H_CELL;
     }
 
-    function HighlightSolutionError(r, c) {
-        if (board_unsolved[r][c] !== 0 && board_unsolved[r][c] !== board_solved[r][c])
-            document.getElementById(`c${r}${c}`).style.backgroundColor = ERROR;
-    }
+    function HighlightSolutionError() {
+        for (let i = 0; i < 9; i++) {
+            for (let j = 0; j < 9; j++) {
+                if (board_unsolved[i][j] !== 0 && board_unsolved[i][j] !== board_solved[i][j])
+                    document.getElementById(`c${i}${j}`).style.backgroundColor = ERROR;
+            }
+        }
+    }
 
     function HighlightRuleError() {
 
